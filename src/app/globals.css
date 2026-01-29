@@ -25,3 +25,59 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Add to your global CSS file */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-delayed-2 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes float-delayed-3 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 4s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-float-delayed-2 {
+  animation: float-delayed-2 3.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-float-delayed-3 {
+  animation: float-delayed-3 4.5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}

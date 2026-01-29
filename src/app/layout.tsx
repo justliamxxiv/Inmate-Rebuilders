@@ -2,6 +2,21 @@ import type { Metadata } from 'next';
 import { Raleway, Prata } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { Playfair_Display, Nunito } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-nunito',
+})
+
 
 // Configure fonts
 const raleway = Raleway({ 
@@ -27,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${raleway.variable} ${prata.variable}`}>
+    <html lang="en" className={`${playfair.className} ${nunito.variable}`}>
       <body className="font-sans bg-white antialiased">
         <Navbar />
         {children}

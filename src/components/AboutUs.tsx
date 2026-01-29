@@ -9,7 +9,7 @@ import {
   RefreshCw, 
   Award,
   Target,
-  HandHeart,
+  // HandHeart,
   Gavel,
   UserCheck,
   Shield,
@@ -60,7 +60,7 @@ export default function AboutUs() {
   // Alternative icons if you prefer different ones:
   const alternativeIcons = [
     { icon: <Target className="w-8 h-8" />, color: "text-primary-500" }, // Inclusion
-    { icon: <HandHeart className="w-8 h-8" />, color: "text-primary-500" }, // Compassion
+    // { icon: <HandHeart className="w-8 h-8" />, color: "text-primary-500" }, // Compassion
     { icon: <Gavel className="w-8 h-8" />, color: "text-primary-500" }, // Representation
     { icon: <UserCheck className="w-8 h-8" />, color: "text-primary-500" }, // Empathy
     { icon: <Shield className="w-8 h-8" />, color: "text-primary-500" }, // Restoration
