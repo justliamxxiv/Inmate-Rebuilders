@@ -5,10 +5,29 @@ import Image from "next/image";
 
 type TabType = "legal" | "welfare" | "media" | "logistics";
 
-// Shared Background Component
-const TabSectionBackground = ({ children }: { children: React.ReactNode }) => {
+// Shared Background Component with animation
+const TabSectionBackground = ({ 
+  children, 
+  delay = 0 
+}: { 
+  children: React.ReactNode;
+  delay?: number;
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation after a short delay for content inside tabs
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100 + delay);
+    
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   return (
-    <div className="relative pt-12 md:pt-24 pb-16 px-6">
+    <div className={`relative pt-12 md:pt-24 pb-16 px-6 transition-all duration-700 ${
+      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+    }`}>
       {/* Shared Background Image */}
       <Image
         src="/images/team/white-paper-bg.jpg"
@@ -36,6 +55,9 @@ const TabSectionBackground = ({ children }: { children: React.ReactNode }) => {
 export default function Team() {
   const [activeTab, setActiveTab] = useState<TabType>("legal");
   const [isMobile, setIsMobile] = useState(false);
+  const [sectionVisible, setSectionVisible] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(false);
+  const [tabsVisible, setTabsVisible] = useState(false);
 
   useEffect(() => {
     // Check if mobile on mount and window resize
@@ -46,7 +68,32 @@ export default function Team() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener("resize", checkMobile);
+    // Intersection Observer for section animation
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setSectionVisible(true);
+            // Trigger hero and tabs animations with delays
+            setTimeout(() => setHeroVisible(true), 100);
+            setTimeout(() => setTabsVisible(true), 300);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const section = document.getElementById("volunteer");
+    if (section) {
+      sectionObserver.observe(section);
+    }
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      if (section) {
+        sectionObserver.unobserve(section);
+      }
+    };
   }, []);
 
   const tabs: { id: TabType; label: string }[] = [
@@ -65,7 +112,9 @@ export default function Team() {
     // On mobile, show all sections stacked
     if (isMobile) {
       return (
-        <div>
+        <div className={`space-y-8 transition-all duration-700 ${
+          sectionVisible ? "opacity-100" : "opacity-0"
+        }`}>
           <LegalContent />
           <WelfareContent />
           <MediaContent />
@@ -75,25 +124,27 @@ export default function Team() {
     }
 
     // On tablet and larger, show only active tab
-    switch (activeTab) {
-      case "legal":
-        return <LegalContent />;
-      case "welfare":
-        return <WelfareContent />;
-      case "media":
-        return <MediaContent />;
-      case "logistics":
-        return <LogisticsContent />;
-      default:
-        return <LegalContent />;
-    }
+    return (
+      <div className={`transition-all duration-500 ${
+        sectionVisible ? "opacity-100" : "opacity-0"
+      }`}>
+        {activeTab === "legal" && <LegalContent />}
+        {activeTab === "welfare" && <WelfareContent />}
+        {activeTab === "media" && <MediaContent />}
+        {activeTab === "logistics" && <LogisticsContent />}
+      </div>
+    );
   };
 
   return (
-    <section className="recruitment-wrapper relative w-full bg-[#EEF3F2] overflow-hidden">
+    <section id="volunteer" className="recruitment-wrapper relative w-full bg-[#EEF3F2] overflow-hidden">
       {/* TOP IMAGE CONTAINER - Only show on tablet and larger screens */}
       {!isMobile && (
-        <div className="relative w-full h-[320px] md:h-[400px] lg:h-[320px]">
+        <div 
+          className={`relative w-full h-[320px] md:h-[400px] lg:h-[320px] transition-all duration-1000 ${
+            heroVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
+          }`}
+        >
           <Image
             src="/images/team/girls.png"
             alt="Background"
@@ -106,14 +157,19 @@ export default function Team() {
           <div className="absolute inset-0 bg-black/10"></div>
 
           {/* CATEGORY TABS — Positioned at bottom of image */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 items-end gap-5 w-full md:w-[80%] justify-center px-4 tab-container hidden md:flex">
+          <div 
+            className={`absolute bottom-0 left-1/2 -translate-x-1/2 z-20 items-end gap-5 w-full md:w-[80%] justify-center px-4 tab-container hidden md:flex transition-all duration-700 ${
+              tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+            style={{ transitionDelay: "200ms" }}
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                className={`tab-btn flex-1 px-4 lg:px-6 py-4 font-semibold text-sm rounded-t-2xl text-center tracking-wide whitespace-nowrap transition-colors ${
+                className={`tab-btn flex-1 px-4 lg:px-6 py-4 font-semibold text-sm rounded-t-2xl text-center tracking-wide whitespace-nowrap transition-all duration-300 transform hover:scale-105 ${
                   activeTab === tab.id
-                    ? "bg-[#1B4332] text-white"
-                    : "bg-white text-gray-800 hover:text-gray-900 "
+                    ? "bg-[#1B4332] text-white shadow-lg"
+                    : "bg-white text-gray-800 hover:text-gray-900 hover:shadow-md"
                 }`}
                 onClick={() => handleTabClick(tab.id)}
               >
@@ -133,12 +189,25 @@ export default function Team() {
 // Sub-components for each tab content
 function LegalContent() {
   const [isHovered, setIsHovered] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <TabSectionBackground>
-      <div className="relative z-10" data-content="legal">
-        {/* HEADING */}
-        <div className="max-w-lg mx-auto text-center mb-10">
+    <TabSectionBackground delay={100}>
+      <div className="relative z-10 space-y-8" data-content="legal">
+        {/* HEADING with animation */}
+        <div 
+          className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
             Are you a lawyer passionate about justice? Join us and use your
             legal expertise to advocate for fair representation and access to
@@ -146,10 +215,15 @@ function LegalContent() {
           </h2>
         </div>
 
-        {/* CTA BUTTON */}
-        <div className="flex justify-center mb-16">
+        {/* CTA BUTTON with animation */}
+        <div 
+          className={`flex justify-center mb-16 transition-all duration-700 ${
+            contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
           <button
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide"
+            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => console.log("Join legal team clicked")}
@@ -162,8 +236,13 @@ function LegalContent() {
           </button>
         </div>
 
-        {/* SINGLE CENTERED IMAGE - Larger on mobile */}
-        <div className="w-full px-4">
+        {/* SINGLE CENTERED IMAGE with animation */}
+        <div 
+          className={`w-full px-4 transition-all duration-1000 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "400ms" }}
+        >
           <div className="relative flex justify-center items-center">
             <div className="w-full flex justify-center">
               <Image
@@ -171,7 +250,7 @@ function LegalContent() {
                 alt="Legal Team Illustration"
                 width={900}
                 height={300}
-                className="mx-auto w-full max-w-[900px] h-auto"
+                className="mx-auto w-full max-w-[900px] h-auto transform transition-all duration-500 hover:scale-105"
                 priority
                 sizes="(max-width: 640px) 98vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 900px"
               />
@@ -185,12 +264,25 @@ function LegalContent() {
 
 function WelfareContent() {
   const [isHovered, setIsHovered] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <TabSectionBackground>
-      <div className="relative z-10" data-content="welfare">
+    <TabSectionBackground delay={100}>
+      <div className="relative z-10 space-y-8" data-content="welfare">
         {/* HEADING */}
-        <div className="max-w-lg mx-auto text-center mb-10">
+        <div 
+          className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
             Your care can be a lifeline for individuals rebuilding their lives.
             Join us as a welfare volunteer and provide essential support and
@@ -199,9 +291,14 @@ function WelfareContent() {
         </div>
 
         {/* CTA BUTTON */}
-        <div className="flex justify-center mb-16">
+        <div 
+          className={`flex justify-center mb-16 transition-all duration-700 ${
+            contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
           <button
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide"
+            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => console.log("Join welfare team clicked")}
@@ -214,7 +311,13 @@ function WelfareContent() {
           </button>
         </div>
 
-        <div className="w-full px-4">
+        {/* IMAGE */}
+        <div 
+          className={`w-full px-4 transition-all duration-1000 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "400ms" }}
+        >
           <div className="relative flex justify-center items-center">
             <div className="w-full flex justify-center">
               <Image
@@ -222,7 +325,7 @@ function WelfareContent() {
                 alt="Welfare Team Illustration"
                 width={484}
                 height={300}
-                className="mx-auto w-full max-w-[600px] h-auto"
+                className="mx-auto w-full max-w-[600px] h-auto transform transition-all duration-500 hover:scale-105"
                 priority
                 sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 600px"
               />
@@ -236,12 +339,25 @@ function WelfareContent() {
 
 function MediaContent() {
   const [isHovered, setIsHovered] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <TabSectionBackground>
-      <div className="relative z-10" data-content="media">
+    <TabSectionBackground delay={100}>
+      <div className="relative z-10 space-y-8" data-content="media">
         {/* HEADING */}
-        <div className="max-w-lg mx-auto text-center mb-10">
+        <div 
+          className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
             Love storytelling? Join us as a media volunteer and help amplify our
             mission and the inspiring stories of individuals we empower.
@@ -249,9 +365,14 @@ function MediaContent() {
         </div>
 
         {/* CTA BUTTON */}
-        <div className="flex justify-center mb-16">
+        <div 
+          className={`flex justify-center mb-16 transition-all duration-700 ${
+            contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
           <button
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide"
+            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => console.log("Join media team clicked")}
@@ -264,7 +385,13 @@ function MediaContent() {
           </button>
         </div>
 
-        <div className="w-full px-4">
+        {/* IMAGE */}
+        <div 
+          className={`w-full px-4 transition-all duration-1000 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "400ms" }}
+        >
           <div className="relative flex justify-center items-center">
             <div className="w-full flex justify-center">
               <Image
@@ -272,7 +399,7 @@ function MediaContent() {
                 alt="Media Team Illustration"
                 width={700}
                 height={300}
-                className="mx-auto w-full max-w-[800px] h-auto"
+                className="mx-auto w-full max-w-[800px] h-auto transform transition-all duration-500 hover:scale-105"
                 priority
                 sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 800px"
               />
@@ -286,12 +413,25 @@ function MediaContent() {
 
 function LogisticsContent() {
   const [isHovered, setIsHovered] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <TabSectionBackground>
-      <div className="relative z-10" data-content="logistics">
+    <TabSectionBackground delay={100}>
+      <div className="relative z-10 space-y-8" data-content="logistics">
         {/* HEADING */}
-        <div className="max-w-lg mx-auto text-center mb-10">
+        <div 
+          className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
             Organized and ready to help? Offer your organizational talents to
             manage events, fundraising initiatives, or resource distribution. 
@@ -299,9 +439,14 @@ function LogisticsContent() {
         </div>
 
         {/* CTA BUTTON */}
-        <div className="flex justify-center mb-16">
+        <div 
+          className={`flex justify-center mb-16 transition-all duration-700 ${
+            contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
           <button
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide"
+            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => console.log("Join logistics team clicked")}
@@ -314,7 +459,13 @@ function LogisticsContent() {
           </button>
         </div>
 
-        <div className="w-full px-4">
+        {/* IMAGE */}
+        <div 
+          className={`w-full px-4 transition-all duration-1000 ${
+            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "400ms" }}
+        >
           <div className="relative flex justify-center items-center">
             <div className="w-full flex justify-center">
               <Image
@@ -322,7 +473,7 @@ function LogisticsContent() {
                 alt="Logistics Team Illustration"
                 width={700}
                 height={300}
-                className="mx-auto w-full max-w-[800px] h-auto"
+                className="mx-auto w-full max-w-[800px] h-auto transform transition-all duration-500 hover:scale-105"
                 priority
                 sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 800px"
               />

@@ -1,7 +1,6 @@
+// app/layout.tsx
 import type { Metadata } from 'next';
-import { Raleway, Prata } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar';
 import { Playfair_Display, Nunito } from "next/font/google";
 
 const playfair = Playfair_Display({
@@ -13,22 +12,8 @@ const playfair = Playfair_Display({
 
 const nunito = Nunito({
   subsets: ['latin'],
-  display: 'swap',
   variable: '--font-nunito',
-})
-
-
-// Configure fonts
-const raleway = Raleway({ 
-  subsets: ['latin'],
-  variable: '--font-raleway',
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-});
-
-const prata = Prata({
-  subsets: ['latin'],
-  variable: '--font-prata',
-  weight: '400',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -38,13 +23,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={`${playfair.className} ${nunito.variable}`}>
       <body className="font-sans bg-white antialiased">
-        <Navbar />
         {children}
       </body>
     </html>

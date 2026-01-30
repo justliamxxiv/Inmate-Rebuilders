@@ -13,9 +13,9 @@ export default function Navbar() {
   
   const navItems = [
   { name: 'About', href: '/#about-us' }, 
-  { name: 'Volunteer', href: '/volunteer' },
-  { name: 'Partner', href: '/partner' },
-  { name: 'Portfolio', href: '/portfolio' },
+  { name: 'Volunteer', href: '/#volunteer' },
+  { name: 'Partner', href: '/#partner' },
+  { name: 'Portfolio', href: '/#portfolio' },
 ];
 
   // Handle scroll for glass effect
@@ -73,8 +73,8 @@ export default function Navbar() {
 
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/80 backdrop-blur-xl shadow-lg' 
-          : 'bg-white shadow-sm border-b'
+          ? 'bg-[#F8FFFF]/80 backdrop-blur-xl ' 
+          : 'bg-[#F8FFFF] shadow-sm border-b'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
@@ -90,7 +90,7 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-gray-800 hover:text-primary-500 font-semibold text-lg transition-colors"
+                    className="font-nunito text-gray-800 hover:text-primary-500 font-semibold text-lg transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -100,9 +100,14 @@ export default function Navbar() {
 
             {/* Donate Button - Desktop Only */}
             <div className="hidden md:block">
-              <button className="bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3 rounded-full transition-colors focus:outline-none">
+              <Link
+               href="/donate"
+               > 
+               <button className="font-nunito bg-[#61A326] hover:bg-[#61A326] text-black  px-8 py-3 rounded-full transition-colors focus:outline-none">
                 Donate
               </button>
+              </Link>
+              
             </div>
 
             {/* Mobile Menu Button */}
