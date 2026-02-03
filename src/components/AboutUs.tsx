@@ -16,6 +16,8 @@ import {
   Star,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+
 export default function AboutUs() {
   const [isVisible, setIsVisible] = useState(false);
   const coreValues = [
@@ -66,7 +68,6 @@ export default function AboutUs() {
   // Alternative icons if you prefer different ones:
   const alternativeIcons = [
     { icon: <Target className="w-8 h-8" />, color: "text-primary-500" }, // Inclusion
-    // { icon: <HandHeart className="w-8 h-8" />, color: "text-primary-500" }, // Compassion
     { icon: <Gavel className="w-8 h-8" />, color: "text-primary-500" }, // Representation
     { icon: <UserCheck className="w-8 h-8" />, color: "text-primary-500" }, // Empathy
     { icon: <Shield className="w-8 h-8" />, color: "text-primary-500" }, // Restoration
@@ -111,12 +112,11 @@ export default function AboutUs() {
             <br />
             Empower Change
           </h2>
-          <a
-            href="#"
-            className="inline-block text-primary-500 font-sans font-semibold text-lg hover:text-primary-600 transition-colors duration-300"
-          >
-            Learn more about us →
-          </a>
+          <Link href="/about">
+            <p className="inline-block text-primary-500 font-sans font-semibold text-lg hover:text-primary-600 transition-colors duration-300">
+              Learn more about us →
+            </p>
+          </Link>
         </div>
 
         {/* Core Values Grid */}

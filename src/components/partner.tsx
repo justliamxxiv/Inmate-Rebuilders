@@ -81,30 +81,16 @@ export default function PartneringSection() {
               onLoad={handleImageLoad}
             />
             
-            {/* Gradient overlay for better text readability if needed */}
-            <div className={`absolute inset-0 bg-gradient-to-t from-black/5 to-transparent transition-opacity duration-1000 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
-            }`} style={{ transitionDelay: '600ms' }}></div>
+           
           </div>
           
-          {/* Optional decorative elements */}
-          <div className={`absolute -bottom-4 -right-4 w-24 h-24 border-2 border-green-200 rounded-full transition-all duration-1000 ${
-            isVisible ? 'opacity-100' : 'opacity-0 translate-x-8 translate-y-8'
-          }`} style={{ transitionDelay: '700ms' }}></div>
-          <div className={`absolute -top-4 -left-4 w-16 h-16 border border-green-100 rounded-full transition-all duration-1000 ${
-            isVisible ? 'opacity-100' : 'opacity-0 -translate-x-8 -translate-y-8'
-          }`} style={{ transitionDelay: '800ms' }}></div>
+         
         </div>
         
         {/* Optional call to action button with animation */}
-        <div 
-          className={`flex justify-center mt-12 transition-all duration-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-          style={{ transitionDelay: '600ms' }}
-        >
+        
           
-        </div>
+        {/* </div> */}
       </div>
     </section>
   );

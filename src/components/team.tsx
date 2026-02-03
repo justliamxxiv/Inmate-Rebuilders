@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type TabType = "legal" | "welfare" | "media" | "logistics";
 
@@ -222,11 +223,13 @@ function LegalContent() {
           }`}
           style={{ transitionDelay: "200ms" }}
         >
-          <button
+          
+         <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
+           <button
             className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => console.log("Join legal team clicked")}
+            
             style={{
               backgroundColor: isHovered ? "#333333" : "transparent",
               color: isHovered ? "white" : "#333333",
@@ -234,6 +237,7 @@ function LegalContent() {
           >
             Join our team of lawyers
           </button>
+         </Link>
         </div>
 
         {/* SINGLE CENTERED IMAGE with animation */}
@@ -297,11 +301,12 @@ function WelfareContent() {
           }`}
           style={{ transitionDelay: "200ms" }}
         >
+          <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
           <button
             className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => console.log("Join welfare team clicked")}
+            
             style={{
               backgroundColor: isHovered ? "#333333" : "transparent",
               color: isHovered ? "white" : "#333333",
@@ -309,6 +314,7 @@ function WelfareContent() {
           >
             Join our welfare unit
           </button>
+          </Link>
         </div>
 
         {/* IMAGE */}
@@ -371,11 +377,12 @@ function MediaContent() {
           }`}
           style={{ transitionDelay: "200ms" }}
         >
+
+          <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
           <button
             className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => console.log("Join media team clicked")}
             style={{
               backgroundColor: isHovered ? "#333333" : "transparent",
               color: isHovered ? "white" : "#333333",
@@ -383,6 +390,8 @@ function MediaContent() {
           >
             Join our media crew
           </button>
+          </Link>
+          
         </div>
 
         {/* IMAGE */}
@@ -445,11 +454,11 @@ function LogisticsContent() {
           }`}
           style={{ transitionDelay: "200ms" }}
         >
+          <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
           <button
             className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => console.log("Join logistics team clicked")}
             style={{
               backgroundColor: isHovered ? "#333333" : "transparent",
               color: isHovered ? "white" : "#333333",
@@ -457,6 +466,8 @@ function LogisticsContent() {
           >
             Join our logistics unit
           </button>
+          </Link>
+          
         </div>
 
         {/* IMAGE */}
