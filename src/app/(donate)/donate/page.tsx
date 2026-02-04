@@ -2,14 +2,22 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { handlePaystackPayment } from "@/lib/paystack";
+import { useRouter } from "next/navigation";
 
-export default function DonateV2() {
+export default function DonateWithPopup() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [donationType, setDonationType] = useState<"once" | "monthly">("monthly");
   const [selectedAmount, setSelectedAmount] = useState<string | null>(null);
   const [customAmount, setCustomAmount] = useState<string>("NGN");
   const [isDonating, setIsDonating] = useState(false);
   const [isAmountFocused, setIsAmountFocused] = useState(false);
+  
+  // Donor information
+  const [donorName, setDonorName] = useState("");
+  const [donorEmail, setDonorEmail] = useState("");
+  const [donorPhone, setDonorPhone] = useState("");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -42,34 +50,65 @@ export default function DonateV2() {
     { value: "50000", label: "NGN 50,000" },
   ];
 
-  const handleDonate = () => {
-    setIsDonating(true);
-    
+  const handleDonate = async () => {
+    // Validation
+    if (!donorName.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+
+    if (!donorEmail.trim() || !donorEmail.includes('@')) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
     // Extract numeric value from custom amount
     const numericAmount = customAmount.replace(/[^0-9]/g, '');
     const amount = selectedAmount || numericAmount;
     
     if (!amount || parseInt(amount) === 0) {
       alert("Please select or enter a valid donation amount");
-      setIsDonating(false);
       return;
     }
 
-    console.log(`Donating ${amount} NGN (${donationType})`);
-    
-    // Simulate donation processing
-    setTimeout(() => {
-      const formattedAmount = parseInt(amount).toLocaleString();
-      alert(`Thank you for your ${donationType} donation of NGN ${formattedAmount}!`);
+    if (parseInt(amount) < 100) {
+      alert("Minimum donation amount is NGN 100");
+      return;
+    }
+
+    setIsDonating(true);
+
+    try {
+      // Use Paystack popup method
+      await handlePaystackPayment(
+        donorEmail.trim(),
+        parseInt(amount),
+        donorName.trim(),
+        donorPhone.trim() || undefined,
+        donationType,
+        // On success
+        (reference) => {
+          console.log('Payment successful:', reference);
+          setIsDonating(false);
+          // Redirect to success page
+          router.push(`/payment/callback?reference=${reference}`);
+        },
+        // On failure
+        (error) => {
+          console.error('Payment failed:', error);
+          alert(error);
+          setIsDonating(false);
+        }
+      );
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      alert(error.message || 'Failed to process payment. Please try again.');
       setIsDonating(false);
-      setSelectedAmount(null);
-      setCustomAmount("NGN");
-    }, 1500);
+    }
   };
 
   const handleAmountButtonClick = (value: string) => {
     setSelectedAmount(value);
-    // Remove "NGN" prefix if present in customAmount
     const numericValue = customAmount.replace(/[^0-9]/g, '');
     if (numericValue === value) {
       setCustomAmount("NGN");
@@ -79,14 +118,12 @@ export default function DonateV2() {
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     
-    // If value starts with NGN or is empty, set it as is
     if (value.startsWith("NGN") || value === "") {
       setCustomAmount(value);
       setSelectedAmount(null);
       return;
     }
     
-    // If it's a number, add NGN prefix
     if (/^\d+$/.test(value.replace(/[^0-9]/g, ''))) {
       setCustomAmount(`NGN ${value.replace(/[^0-9]/g, '')}`);
       setSelectedAmount(null);
@@ -167,6 +204,53 @@ export default function DonateV2() {
             }`}
             style={{ transitionDelay: "200ms" }}
           >
+            {/* Donor Information Fields */}
+            <div className="mb-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={donorName}
+                  onChange={(e) => setDonorName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full border-2 border-gray-400 rounded-xl py-3 px-4 text-base focus:outline-none focus:border-black transition-all duration-300"
+                  required
+                  disabled={isDonating}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={donorEmail}
+                  onChange={(e) => setDonorEmail(e.target.value)}
+                  placeholder="john@example.com"
+                  className="w-full border-2 border-gray-400 rounded-xl py-3 px-4 text-base focus:outline-none focus:border-black transition-all duration-300"
+                  required
+                  disabled={isDonating}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Phone Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  value={donorPhone}
+                  onChange={(e) => setDonorPhone(e.target.value)}
+                  placeholder="+234 800 000 0000"
+                  className="w-full border-2 border-gray-400 rounded-xl py-3 px-4 text-base focus:outline-none focus:border-black transition-all duration-300"
+                  disabled={isDonating}
+                />
+              </div>
+            </div>
+
             {/* Donation Type Toggle */}
             <div 
               className={`bg-gray-100 rounded-full p-2 mb-6 md:mb-8 flex transition-all duration-500 ${
@@ -175,7 +259,8 @@ export default function DonateV2() {
             >
               <button
                 onClick={() => setDonationType("once")}
-                className={`w-1/2 py-4 px-4 md:px-6 rounded-full text-base md:text-lg font-medium text-black transition-all duration-300 transform hover:scale-90 ${
+                disabled={isDonating}
+                className={`w-1/2 py-4 px-4 md:px-6 rounded-full text-base md:text-lg font-medium text-black transition-all duration-300 transform hover:scale-90 disabled:opacity-50 disabled:cursor-not-allowed ${
                   donationType === "once" 
                     ? "bg-white border-2 border-black shadow-lg" 
                     : "hover:bg-gray-50"
@@ -185,7 +270,8 @@ export default function DonateV2() {
               </button>
               <button
                 onClick={() => setDonationType("monthly")}
-                className={`w-1/2 py-4 px-4 md:px-6 rounded-full text-base md:text-lg font-medium text-black transition-all duration-300 transform hover:scale-90 ${
+                disabled={isDonating}
+                className={`w-1/2 py-4 px-4 md:px-6 rounded-full text-base md:text-lg font-medium text-black transition-all duration-300 transform hover:scale-90 disabled:opacity-50 disabled:cursor-not-allowed ${
                   donationType === "monthly" 
                     ? "bg-[#6cab2f] border-2 border-black shadow-lg" 
                     : "hover:bg-gray-50"
@@ -229,7 +315,8 @@ export default function DonateV2() {
                 <button
                   key={amount.value}
                   onClick={() => handleAmountButtonClick(amount.value)}
-                  className={`border-2 rounded-xl py-3 md:py-4 px-0 text-sm md:text-base font-medium transition-all duration-300 transform hover:scale-105 ${
+                  disabled={isDonating}
+                  className={`border-2 rounded-xl py-3 md:py-4 px-0 text-sm md:text-base font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
                     selectedAmount === amount.value
                       ? "border-[#6cab2f] bg-green-50 text-[#6cab2f]"
                       : "border-gray-400 bg-white text-black hover:border-gray-600"
@@ -257,13 +344,11 @@ export default function DonateV2() {
                   onChange={handleCustomAmountChange}
                   onFocus={handleCustomAmountFocus}
                   onBlur={handleCustomAmountBlur}
-                  className={`w-full border-2 border-gray-400 rounded-xl py-3 md:py-4 pl-4 pr-12 text-base md:text-lg focus:outline-none focus:border-black transition-all duration-300 ${
+                  disabled={isDonating}
+                  className={`w-full border-2 border-gray-400 rounded-xl py-3 md:py-4 pl-4 pr-12 text-base md:text-lg focus:outline-none focus:border-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
                     isAmountFocused ? "border-black bg-white" : ""
                   }`}
                 />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">
-                  {/* Currency symbol or validation icon could go here */}
-                </div>
               </div>
             </div>
 
@@ -289,8 +374,9 @@ export default function DonateV2() {
               )}
             </button>
 
-           
-            
+            <p className="text-center text-sm text-gray-500 mt-4">
+              Secured by Paystack. Your payment information is encrypted and secure.
+            </p>
           </div>
         </div>
       </div>
