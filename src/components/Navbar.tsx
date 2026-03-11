@@ -12,7 +12,7 @@ export default function Navbar() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   
   const navItems = [
-  { name: 'About', href: '/#about-us' }, 
+  { name: 'About', href: '/about' }, 
   { name: 'Volunteer', href: '/#volunteer' },
   { name: 'Partner', href: '/#partner' },
   { name: 'Portfolio', href: '/#portfolio' },

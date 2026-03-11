@@ -18,7 +18,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AboutUs() {
+export default function AboutUs({ showMore = true }) {
   const [isVisible, setIsVisible] = useState(false);
   const coreValues = [
     {
@@ -112,11 +112,13 @@ export default function AboutUs() {
             <br />
             Empower Change
           </h2>
-          <Link href="/about">
-            <p className="inline-block text-primary-500 font-sans font-semibold text-lg hover:text-primary-600 transition-colors duration-300">
-              Learn more about us →
-            </p>
-          </Link>
+               {showMore && (
+        <Link href="/about">
+          <p className="inline-block text-primary-500 font-sans font-semibold text-lg hover:text-primary-600 transition-colors duration-300">
+            Learn more about us →
+          </p>
+        </Link>
+      )}
         </div>
 
         {/* Core Values Grid */}

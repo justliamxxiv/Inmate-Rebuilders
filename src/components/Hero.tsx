@@ -7,10 +7,10 @@ const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   
   const metrics = [
-    { value: '10k', label: 'Beneficiary' },
-    { value: '20', label: 'Partnerships' },
-    { value: '50', label: 'Prisons visited' },
-    { value: '10', label: 'States visited' },
+    { value: '2k', label: 'Beneficiary' },
+    { value: '3', label: 'Partnerships' },
+    { value: '5', label: 'Prisons visited' },
+    { value: '5', label: 'States visited' },
   ];
 
   // Intersection Observer for animation
@@ -142,5 +142,5 @@ const HeroSection = () => {
     </section>
   );
 };
-
+  
 export default HeroSection;
