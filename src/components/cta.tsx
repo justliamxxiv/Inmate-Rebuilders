@@ -159,7 +159,7 @@ export default function CTA() {
         style={{ transitionDelay: "300ms" }}
       >
         {/* Heading */}
-        <h1 className="font-serif-display font-bold text-3xl sm:text-4xl md:text-5xl text-gray-900 leading-tight mb-6">
+        <h1 className="font-serif-display font-bold text-3xl md:text-4xl lg:text-5xl text-gray-900 leading-tight mb-6">
           Invest in Change,
           <br />
           Donate Today
