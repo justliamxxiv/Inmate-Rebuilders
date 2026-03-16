@@ -130,7 +130,7 @@ export default function Navbar() {
           {/* Mobile Menu Dropdown */}
           <div
             ref={menuRef}
-            className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-white/20 shadow-2xl transition-all duration-300 ease-in-out ${
+            className={`md:hidden absolute top-full left-0 right-0 bg-[#F8FFFF] backdrop-blur-xl border-t border-white/20 shadow-2xl transition-all duration-300 ease-in-out ${
               isMenuOpen
                 ? 'translate-y-0 opacity-100 visible'
                 : '-translate-y-4 opacity-0 invisible'
@@ -149,12 +149,18 @@ export default function Navbar() {
                   </Link>
                 ))}
                 
-                <button 
-                  className="bg-primary-500 hover:bg-primary-600 text-white font-bold text-lg py-4 rounded-full transition-colors shadow-lg hover:shadow-xl focus:outline-none mt-4"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Donate
-                </button>
+                <Link
+  href="/donate"
+  className="block w-full"
+  onClick={() => setIsMenuOpen(false)}
+>
+  <button
+    className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold text-lg py-4 rounded-full transition-colors shadow-lg hover:shadow-xl focus:outline-none mt-4"
+  >
+    Donate
+  </button>
+</Link>
+                
               </div>
             </div>
           </div>

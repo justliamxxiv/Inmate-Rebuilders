@@ -108,7 +108,7 @@ const Portfolio = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <h2 className="font-bold text-gray-900 text-4xl md:text-5xl mb-16 md:mb-20">
+          <h2 className="font-bold text-gray-900 text-3xl md:text-4xl lg:text-5xl mb-16 md:mb-20">
             Dive into Our<br />
             Program Portfolio
           </h2>

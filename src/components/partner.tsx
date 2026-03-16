@@ -43,7 +43,7 @@ export default function PartneringSection() {
           <div className={`w-full lg:w-1/2 transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
           }`}>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
               Partnering with<br />Purpose
             </h2>
           </div>
