@@ -174,7 +174,7 @@ export default function Footer() {
               </a>
             </p>
             <Link
-              href="#"
+              href="https://www.instagram.com/inmates_rebuilders?igsh=MWZnOXp0OHA5MXlo"
               className={`inline-flex items-center mt-4 text-sm font-medium transition-all duration-300 hover:text-[#61A326] group ${
                 isVisible
                   ? "opacity-100 translate-y-0"
