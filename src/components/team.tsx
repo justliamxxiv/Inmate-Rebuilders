@@ -99,7 +99,7 @@ export default function Team() {
 
   const tabs: { id: TabType; label: string }[] = [
     { id: "legal", label: "Legal Personnel" },
-    { id: "welfare", label: "Welfare" },
+    // { id: "welfare", label: "Welfare" }, 
     { id: "media", label: "Media and Publicity" },
     { id: "logistics", label: "Logistics" },
   ];
@@ -117,7 +117,7 @@ export default function Team() {
           sectionVisible ? "opacity-100" : "opacity-0"
         }`}>
           <LegalContent />
-          <WelfareContent />
+          {/* <WelfareContent /> */}
           <MediaContent />
           <LogisticsContent />
         </div>
@@ -130,7 +130,7 @@ export default function Team() {
         sectionVisible ? "opacity-100" : "opacity-0"
       }`}>
         {activeTab === "legal" && <LegalContent />}
-        {activeTab === "welfare" && <WelfareContent />}
+        {/* {activeTab === "welfare" && <WelfareContent />} */}
         {activeTab === "media" && <MediaContent />}
         {activeTab === "logistics" && <LogisticsContent />}
       </div>
@@ -266,82 +266,82 @@ function LegalContent() {
   );
 }
 
-function WelfareContent() {
-  const [isHovered, setIsHovered] = useState(false);
-  const [contentVisible, setContentVisible] = useState(false);
+// function WelfareContent() {
+//   const [isHovered, setIsHovered] = useState(false);
+//   const [contentVisible, setContentVisible] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setContentVisible(true);
-    }, 100);
+//   useEffect(() => {
+//     const timer = setTimeout(() => {
+//       setContentVisible(true);
+//     }, 100);
     
-    return () => clearTimeout(timer);
-  }, []);
+//     return () => clearTimeout(timer);
+//   }, []);
 
-  return (
-    <TabSectionBackground delay={100}>
-      <div className="relative z-10 space-y-8" data-content="welfare">
-        {/* HEADING */}
-        <div 
-          className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
-            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
-            Your care can be a lifeline for individuals rebuilding their lives.
-            Join us as a welfare volunteer and provide essential support and
-            care to inmates in need.
-          </h2>
-        </div>
+//   return (
+//     <TabSectionBackground delay={100}>
+//       <div className="relative z-10 space-y-8" data-content="welfare">
+//         {/* HEADING */}
+//         <div 
+//           className={`max-w-lg mx-auto text-center mb-10 transition-all duration-700 ${
+//             contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+//           }`}
+//         >
+//           <h2 className="text-[#1a1a1a] font-semibold text-lg sm:text-xl md:text-2xl leading-relaxed tracking-wide uppercase">
+//             Your care can be a lifeline for individuals rebuilding their lives.
+//             Join us as a welfare volunteer and provide essential support and
+//             care to inmates in need.
+//           </h2>
+//         </div>
 
-        {/* CTA BUTTON */}
-        <div 
-          className={`flex justify-center mb-16 transition-all duration-700 ${
-            contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
-          style={{ transitionDelay: "200ms" }}
-        >
-          <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
-          <button
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+//         {/* CTA BUTTON */}
+//         <div 
+//           className={`flex justify-center mb-16 transition-all duration-700 ${
+//             contentVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+//           }`}
+//           style={{ transitionDelay: "200ms" }}
+//         >
+//           <Link href='https://docs.google.com/forms/d/e/1FAIpQLSdjvyMG_EIVYoeguq5lvKiNqHjXGtJ5sHWv8zNwxM3n6mNtmA/viewform'>
+//           <button
+//             className="px-8 sm:px-10 py-3 sm:py-4 border-2 border-[#333333] text-[#333333] font-medium text-sm rounded-full hover:bg-[#333333] hover:text-white transition-all duration-300 tracking-wide transform hover:scale-105"
+//             onMouseEnter={() => setIsHovered(true)}
+//             onMouseLeave={() => setIsHovered(false)}
             
-            style={{
-              backgroundColor: isHovered ? "#333333" : "transparent",
-              color: isHovered ? "white" : "#333333",
-            }}
-          >
-            Join our welfare unit
-          </button>
-          </Link>
-        </div>
+//             style={{
+//               backgroundColor: isHovered ? "#333333" : "transparent",
+//               color: isHovered ? "white" : "#333333",
+//             }}
+//           >
+//             Join our welfare unit
+//           </button>
+//           </Link>
+//         </div>
 
-        {/* IMAGE */}
-        <div 
-          className={`w-full px-4 transition-all duration-1000 ${
-            contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-          style={{ transitionDelay: "400ms" }}
-        >
-          <div className="relative flex justify-center items-center">
-            <div className="w-full flex justify-center">
-              <Image
-                src="/images/team/illustration2.png"
-                alt="Welfare Team Illustration"
-                width={484}
-                height={300}
-                className="mx-auto w-full max-w-[600px] h-auto transform transition-all duration-500 hover:scale-105"
-                priority
-                sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 600px"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </TabSectionBackground>
-  );
-}
+//         {/* IMAGE */}
+//         <div 
+//           className={`w-full px-4 transition-all duration-1000 ${
+//             contentVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+//           }`}
+//           style={{ transitionDelay: "400ms" }}
+//         >
+//           <div className="relative flex justify-center items-center">
+//             <div className="w-full flex justify-center">
+//               <Image
+//                 src="/images/team/illustration2.png"
+//                 alt="Welfare Team Illustration"
+//                 width={484}
+//                 height={300}
+//                 className="mx-auto w-full max-w-[600px] h-auto transform transition-all duration-500 hover:scale-105"
+//                 priority
+//                 sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 600px"
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </TabSectionBackground>
+//   );
+// }
 
 function MediaContent() {
   const [isHovered, setIsHovered] = useState(false);

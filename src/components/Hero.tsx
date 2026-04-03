@@ -108,7 +108,7 @@ const HeroSection = () => {
                 style={{ borderRadius: '0 0 260px 260px' }}
               >
                 <Image
-                  src="/images/hero/hero2.png"
+                  src="/images/hero/herowoman.png"
                   alt="Inmate Rebuilders Logo"
                   fill
                   className="object-cover w-full h-full"

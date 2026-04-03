@@ -55,7 +55,7 @@ export default function DonateWithPopup() {
 
             <div className="relative w-full h-64 md:h-80 mb-8">
               <Image
-                src="/images/hero/hero2.png"
+                src="/images/hero/herowoman.png"
                 alt="Inmates behind bars"
                 fill
                 className="object-cover"
