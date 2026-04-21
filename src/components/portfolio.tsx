@@ -69,7 +69,7 @@ const Portfolio = () => {
     },
     {
       id: 3,
-      title: "Inmate Rebuilder Academy",
+      title: "Inmate Rebuilders",
       description: "A program focused on continuing inmate education and productive engagement for reintegration into society.",
       objectives: [
         "Offer scholarships to outstanding students",
