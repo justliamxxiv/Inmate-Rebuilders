@@ -50,7 +50,7 @@ export default function DonateWithPopup() {
             }`}
           >
             <h1 className="text-3xl md:text-5xl font-serif mb-8">
-              Donate to Inmate Rebuilder
+              Donate to Inmates Rebuilders
             </h1>
 
             <div className="relative w-full h-64 md:h-80 mb-8">

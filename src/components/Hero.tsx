@@ -64,7 +64,7 @@ const HeroSection = () => {
               }`}
               style={{ transitionDelay: '200ms' }}
             >
-              Inmate Rebuilders empowers individuals to break free from their past and build brighter futures. Through rehabilitation, legal support, and community, we help them reintegrate and thrive.
+              Inmates Rebuilders empowers individuals to break free from their past and build brighter futures. Through rehabilitation, legal support, and community, we help them reintegrate and thrive.
             </p>
 
             {/* Sub-label with animation */}
